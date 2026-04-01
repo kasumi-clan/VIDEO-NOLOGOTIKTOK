@@ -1,2 +1,168 @@
 # VIDEO-NOLOGOTIKTOK
 Idk
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KASUMI TECH - SIÊU DỮ LIỆU SMARTPHONE</title>
+    <style>
+        :root { --neon: #00ff88; --sub: #00d4ff; --bg: #050505; --card: #111; --red: #ff3e3e; --gray: #888; }
+        body { 
+            background: var(--bg); color: #fff; font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center;
+        }
+
+        .header { text-align: center; margin: 30px 0; width: 100%; }
+        h1 { font-size: clamp(24px, 8vw, 36px); letter-spacing: 4px; color: var(--neon); text-shadow: 0 0 15px var(--neon); margin: 0; }
+        .sub-title { font-size: 10px; color: #666; letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; }
+
+        .search-container { width: 100%; max-width: 600px; position: sticky; top: 10px; z-index: 100; }
+        .search-input { 
+            width: 100%; padding: 20px; border-radius: 15px; border: 2px solid #222;
+            background: rgba(0,0,0,0.9); color: #fff; font-size: 16px; outline: none; transition: 0.3s;
+            box-sizing: border-box; backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .search-input:focus { border-color: var(--neon); box-shadow: 0 0 25px rgba(0, 255, 136, 0.2); }
+
+        /* Danh sách máy */
+        #result-list { margin-top: 30px; width: 100%; max-width: 600px; }
+        .phone-card { 
+            background: var(--card); border: 1px solid #222; border-radius: 20px; 
+            padding: 22px; margin-bottom: 25px; position: relative;
+            transition: 0.3s;
+        }
+        .phone-card:hover { border-color: #333; transform: translateY(-5px); }
+
+        .phone-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .phone-name { font-size: 22px; font-weight: 900; color: #fff; }
+        .brand-tag { font-size: 10px; padding: 3px 8px; border-radius: 4px; background: #222; color: var(--sub); text-transform: uppercase; font-weight: bold; }
+
+        .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px; color: #ccc; }
+        .spec-item { display: flex; align-items: flex-start; gap: 8px; }
+        .spec-icon { color: var(--neon); font-weight: bold; }
+
+        .price-section { 
+            margin-top: 20px; padding-top: 15px; border-top: 1px solid #222; 
+            display: flex; flex-wrap: wrap; gap: 15px; align-items: center;
+        }
+        .price-item { flex: 1; min-width: 140px; }
+        .price-label { font-size: 10px; color: var(--gray); text-transform: uppercase; display: block; }
+        .price-val { font-size: 16px; font-weight: bold; }
+        .val-new { color: var(--neon); }
+        .val-old { color: var(--sub); }
+        .out-of-stock { color: var(--red) !important; font-style: italic; font-size: 14px; }
+
+        /* Hiệu ứng áp bức */
+        .rejection { 
+            text-align: center; color: var(--red); padding: 50px 20px; border: 2px dashed var(--red);
+            border-radius: 25px; background: rgba(255, 62, 62, 0.05); font-weight: 900;
+            text-transform: uppercase; letter-spacing: 2px; line-height: 1.5;
+            animation: shake 0.2s infinite;
+        }
+        @keyframes shake { 0%, 100% { transform: translate(0); } 25% { transform: translate(-2px, 2px); } 75% { transform: translate(2px, -2px); } }
+
+        .footer { font-size: 9px; color: #333; margin: 50px 0; letter-spacing: 5px; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>KASUMI TECH</h1>
+        <div class="sub-title">HỆ THỐNG DỮ LIỆU TỔNG LỰC v3.0</div>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="search-input" class="search-input" placeholder="Nhập tên máy hoặc hãng (Apple, Samsung, Xiaomi...)" autocomplete="off">
+    </div>
+
+    <div id="result-list"></div>
+
+    <div class="footer">ADMIN KASUMI • POWERED BY DATA ENGINE</div>
+
+    <script>
+        // DỮ LIỆU TỔNG HỢP CỰC LỚN
+        const megaDb = [
+            // --- APPLE ---
+            { brand: "Apple", name: "iPhone 16 Pro Max", chip: "A18 Pro (3nm)", antutu: "1.7M+", pin: "4685mAh (30W)", display: "6.9\" LTPO 120Hz (2000nits)", cam: "48MP + 48MP + 12MP (5x Zoom)", newP: "31.900.000đ", oldP: "28.000.000đ" },
+            { brand: "Apple", name: "iPhone 13 Pro Max", chip: "A15 Bionic", antutu: "1.1M+", pin: "4352mAh (27W)", display: "6.7\" OLED 120Hz", cam: "12MP + 12MP + 12MP", newP: "HẾT HÀNG MỚI", oldP: "14.500.000đ" },
+            { brand: "Apple", name: "iPhone 11", chip: "A13 Bionic", antutu: "600k+", pin: "3110mAh", display: "6.1\" LCD", cam: "12MP + 12MP", newP: "HẾT HÀNG MỚI", oldP: "4.500.000đ" },
+            
+            // --- XIAOMI / REDMI ---
+            { brand: "Xiaomi", name: "Xiaomi 15 Pro", chip: "Snapdragon 8 Elite", antutu: "3.1M+", pin: "6100mAh (90W)", display: "6.73\" 2K 120Hz (3200nits)", cam: "50MP + 50MP + 50MP", newP: "17.200.000đ", oldP: "Chưa có" },
+            { brand: "Xiaomi", name: "Redmi K70 Ultra", chip: "Dimensity 9300+", antutu: "2.3M+", pin: "5500mAh (120W)", display: "6.67\" 1.5K 144Hz (4000nits)", cam: "50MP + 8MP + 2MP", newP: "8.600.000đ", oldP: "7.200.000đ" },
+            { brand: "Xiaomi", name: "Redmi Note 11", chip: "Snapdragon 680", antutu: "280k", pin: "5000mAh (33W)", display: "6.43\" AMOLED 90Hz", cam: "50MP + 8MP + 2MP + 2MP", newP: "HẾT HÀNG MỚI", oldP: "1.900.000đ" },
+            { brand: "Xiaomi", name: "Redmi Note 13 Pro+", chip: "Dimensity 7200 Ultra", antutu: "800k", pin: "5000mAh (120W)", display: "6.67\" 1.5K 120Hz", cam: "200MP + 8MP + 2MP", newP: "7.500.000đ", oldP: "5.800.000đ" },
+
+            // --- SAMSUNG ---
+            { brand: "Samsung", name: "Galaxy S24 Ultra", chip: "Snapdragon 8 Gen 3 For Galaxy", antutu: "2M+", pin: "5000mAh (45W)", display: "6.8\" Dynamic AMOLED 2X 120Hz", cam: "200MP + 50MP + 10MP + 12MP", newP: "23.500.000đ", oldP: "19.000.000đ" },
+            { brand: "Samsung", name: "Galaxy A55 5G", chip: "Exynos 1480", antutu: "720k", pin: "5000mAh (25W)", display: "6.6\" Super AMOLED 120Hz", cam: "50MP + 12MP + 50MP", newP: "9.200.000đ", oldP: "7.100.000đ" },
+            { brand: "Samsung", name: "Galaxy Note 20 Ultra", chip: "Exynos 990 / SD865+", antutu: "600k", pin: "4500mAh (25W)", display: "6.9\" Dynamic AMOLED 2X", cam: "108MP + 12MP + 12MP", newP: "HẾT HÀNG MỚI", oldP: "6.500.000đ" },
+
+            // --- VIVO / iQOO ---
+            { brand: "Vivo", name: "Vivo X200 Pro", chip: "Dimensity 9400", antutu: "3M+", pin: "6000mAh (90W)", display: "6.78\" 120Hz (4500nits)", cam: "50MP + 50MP + 200MP Tele", newP: "16.500.000đ", oldP: "Chưa có" },
+            { brand: "iQOO", name: "iQOO 13", chip: "Snapdragon 8 Elite", antutu: "3.1M+", pin: "6150mAh (120W)", display: "6.82\" 2K 144Hz BOE Q10", cam: "50MP + 50MP + 50MP", newP: "14.200.000đ", oldP: "Chưa có" },
+
+            // --- REALME ---
+            { brand: "Realme", name: "Realme GT7 Pro", chip: "Snapdragon 8 Elite", antutu: "3M+", pin: "6500mAh (120W)", display: "6.78\" OLED 120Hz Eco2", cam: "50MP + 50MP + 8MP", newP: "13.500.000đ", oldP: "Chưa có" },
+            { brand: "Realme", name: "Realme GT5 Pro", chip: "Snapdragon 8 Gen 3", antutu: "2M+", pin: "5400mAh (100W)", display: "6.78\" 1.5K 144Hz (4500nits)", cam: "50MP + 50MP Tele + 8MP", newP: "10.100.000đ", oldP: "8.400.000đ" }
+        ];
+
+        const searchInput = document.getElementById('search-input');
+        const resultList = document.getElementById('result-list');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim().toLowerCase();
+
+            // Chế độ "Áp bức" - Nếu người dân hỏi quá đáng
+            if (query.length > 35 || query.includes("vượt") || query.includes("link")) {
+                resultList.innerHTML = `<div class="rejection">Xin lỗi tôi không thực hiện cuộc tìm điện thoại này được</div>`;
+                return;
+            }
+
+            if (!query) {
+                resultList.innerHTML = "";
+                return;
+            }
+
+            const filtered = megaDb.filter(p => 
+                p.brand.toLowerCase().includes(query) || 
+                p.name.toLowerCase().includes(query) ||
+                p.chip.toLowerCase().includes(query)
+            );
+
+            if (filtered.length > 0) {
+                resultList.innerHTML = filtered.map(p => `
+                    <div class="phone-card">
+                        <div class="phone-header">
+                            <div class="phone-name">${p.name}</div>
+                            <span class="brand-tag">${p.brand}</span>
+                        </div>
+                        <div class="specs-grid">
+                            <div class="spec-item"><span class="spec-icon">◈</span> Chip: ${p.chip}</div>
+                            <div class="spec-item"><span class="spec-icon">◈</span> Antutu: ${p.antutu}</div>
+                            <div class="spec-item"><span class="spec-icon">◈</span> Màn: ${p.display}</div>
+                            <div class="spec-item"><span class="spec-icon">◈</span> Pin: ${p.pin}</div>
+                            <div class="spec-item"><span class="spec-icon">◈</span> Cam: ${p.cam}</div>
+                        </div>
+                        <div class="price-section">
+                            <div class="price-item">
+                                <span class="price-label">Giá máy mới:</span>
+                                <span class="price-val ${p.newP.includes('HẾT') ? 'out-of-stock' : 'val-new'}">${p.newP}</span>
+                            </div>
+                            <div class="price-item">
+                                <span class="price-label">Giá máy cũ (99%):</span>
+                                <span class="price-val val-old">${p.oldP}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                resultList.innerHTML = `<div style="text-align:center; color:#444; font-size:12px; margin-top:20px;">Không tìm thấy máy trong dữ liệu quét...</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
+
